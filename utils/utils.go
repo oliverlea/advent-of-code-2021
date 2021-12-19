@@ -51,5 +51,10 @@ func ReadStrings(fn string) []string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return strings.Split(string(bs), "\n")
+	lines := strings.Split(string(bs), "\n")
+	trimmedLines := make([]string, len(lines))
+	for i, line := range lines {
+		trimmedLines[i] = strings.TrimSpace(line)
+	}
+	return trimmedLines
 }
