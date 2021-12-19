@@ -2,9 +2,11 @@ package utils
 
 import (
 	"bufio"
+	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func ReadLineCh(fn string, ch chan string, done chan bool) {
@@ -42,4 +44,12 @@ loop:
 		}
 	}
 	return output
+}
+
+func ReadStrings(fn string) []string {
+	bs, err := ioutil.ReadFile(fn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return strings.Split(string(bs), "\n")
 }
