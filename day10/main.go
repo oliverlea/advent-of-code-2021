@@ -38,13 +38,6 @@ func (s stack) pop() (stack, rune) {
 	return s[:l-1], s[l-1]
 }
 
-func (s stack) peek() (rune, bool) {
-	if len(s) == 0 {
-		return 0, false
-	}
-	return s[len(s)-1], true
-}
-
 func parse(instruction string) rune {
 	var (
 		s         = make(stack, 0, 100)
