@@ -107,7 +107,7 @@ func (g grid) addVector(v vector, considerDiag bool) {
 
 func eval(vectors []vector, considerDiag bool) {
 	grid := make(grid, GRID_SIZE)
-	for i, _ := range grid {
+	for i := range grid {
 		grid[i] = make([]int, GRID_SIZE)
 	}
 
