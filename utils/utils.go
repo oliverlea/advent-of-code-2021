@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -57,4 +58,17 @@ func ReadStrings(fn string) []string {
 		trimmedLines[i] = strings.TrimSpace(line)
 	}
 	return trimmedLines
+}
+
+func Limit(xs []int) (int, int) {
+	var min, max = math.MaxInt, 0
+	for _, x := range xs {
+		if x < min {
+			min = x
+		}
+		if x > max {
+			max = x
+		}
+	}
+	return min, max
 }

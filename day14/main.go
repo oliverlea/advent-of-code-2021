@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const INPUT_FILE = "testinput"
+const INPUT_FILE = "input"
 
 type pair struct {
 	first  rune
@@ -59,6 +59,19 @@ func (s *state) step() {
 	s.chain = newChain
 }
 
+func limitCounts(m map[rune]int) (int, int) {
+	min, max := math.MaxInt, 0
+	for _, count := range m {
+		if count < min {
+			min = count
+		}
+		if count > max {
+			max = count
+		}
+	}
+	return min, max
+}
+
 func part1(s state) {
 	for i := 0; i < 10; i++ {
 		(&s).step()
@@ -67,39 +80,32 @@ func part1(s state) {
 	for _, r := range s.chain {
 		counts[r]++
 	}
-	var (
-		min, max = math.MaxInt, 0
-		// minR, maxR rune
-	)
-	for _, count := range counts {
-		if count < min {
-			min = count
-			// minR = r
-		}
-		if count > max {
-			max = count
-			// maxR = r
-		}
-	}
+
+	min, max := limitCounts(counts)
 	fmt.Println(min, max)
 	fmt.Println(max - min)
 }
 
 func part2(s state) {
-	// Our target is to expand every possible expansion for half the required steps 40 -> 20.
+	// Expand every possible expansion for half the required steps 40 -> 20.
 	// From this, then simulate the 20 steps of the main polymer string, and count
 	// the expansions as proxy pointers into our cached lookup of expansions over the
-	// next 20 steps :)
-	simulated := make(map[pair][]rune)
+	// next 20 steps
 	simulationCounts := make(map[pair]map[rune]int)
 	for pair := range s.rules {
-		simulateState := state{[]rune{pair.first, pair.second}, s.rules}
+		simulatedState := state{[]rune{pair.first, pair.second}, s.rules}
 		for i := 0; i < 20; i++ {
-			(&simulateState).step()
+			(&simulatedState).step()
 		}
-		simulated[pair] = simulateState.chain
+		trimmedChain := simulatedState.chain
+		if len(trimmedChain) > 2 {
+			// Chop off the end so the chain is just the expanded section
+			trimmedChain = trimmedChain[1 : len(trimmedChain)-1]
+		} else {
+			trimmedChain = []rune{}
+		}
 		simulationCounts[pair] = make(map[rune]int)
-		for _, r := range simulateState.chain {
+		for _, r := range trimmedChain {
 			simulationCounts[pair][r]++
 		}
 	}
@@ -114,22 +120,11 @@ func part2(s state) {
 		for r, count := range simulationCounts[p] {
 			totalCounts[r] += count
 		}
+		totalCounts[s.chain[i]]++
 	}
+	totalCounts[s.chain[len(s.chain)-1]]++
 
-	var (
-		min, max = math.MaxInt, 0
-		// minR, maxR rune
-	)
-	for _, count := range totalCounts {
-		if count < min {
-			min = count
-			// minR = r
-		}
-		if count > max {
-			max = count
-			// maxR = r
-		}
-	}
+	min, max := limitCounts(totalCounts)
 	fmt.Println(min, max)
 	fmt.Println(max - min)
 }
