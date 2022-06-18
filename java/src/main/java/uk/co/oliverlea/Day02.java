@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-public class Day2 {
+public class Day02 {
 
     private record Movement(String direction, int amount) {}
 
@@ -13,23 +13,11 @@ public class Day2 {
         int y = 0;
         for (Movement move : movements) {
             switch (move.direction) {
-                case "up": {
-                    y -= move.amount;
-                    break;
-                }
-                case "down": {
-                    y += move.amount;
-                    break;
-                }
-                case "forward": {
-                    x += move.amount;
-                    break;
-                }
-                case "backward": {
-                    x -= move.amount;
-                    break;
-                }
-                default: throw new IllegalStateException("Unknown direction: " + move.direction);
+                case "up" -> y -= move.amount;
+                case "down" -> y += move.amount;
+                case "forward" -> x += move.amount;
+                case "backward" -> x -= move.amount;
+                default -> throw new IllegalStateException("Unknown direction: " + move.direction);
             }
         }
         return x * y;
@@ -41,32 +29,24 @@ public class Day2 {
         int aim = 0;
         for (Movement move : movements) {
             switch (move.direction) {
-                case "up": {
-                    aim -= move.amount;
-                    break;
-                }
-                case "down": {
-                    aim += move.amount;
-                    break;
-                }
-                case "forward": {
+                case "up" -> aim -= move.amount;
+                case "down" -> aim += move.amount;
+                case "forward" -> {
                     y += move.amount;
                     x += aim * move.amount;
-                    break;
                 }
-                case "backward": {
+                case "backward" -> {
                     y -= move.amount;
                     x -= aim * move.amount;
-                    break;
                 }
-                default: throw new IllegalStateException("Unknown direction: " + move.direction);
+                default -> throw new IllegalStateException("Unknown direction: " + move.direction);
             }
         }
         return x * y;
     }
 
     public static void main(String... args) throws IOException, URISyntaxException {
-        List<Movement> movements = Utils.readLines("input2").stream()
+        List<Movement> movements = Utils.readLines("input02").stream()
                         .map(l -> {
                             String[] lexed = l.split(" ");
                             return new Movement(lexed[0], Integer.parseInt(lexed[1]));

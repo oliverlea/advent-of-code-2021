@@ -2,11 +2,9 @@ package uk.co.oliverlea;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
-public class Day1 {
+public class Day01 {
 
     public static int problem1(List<Integer> input) {
         int increases = 0;
@@ -34,7 +32,7 @@ public class Day1 {
     }
 
     public static void main(String[] args) throws IOException, URISyntaxException {
-        List<Integer> input = Utils.readLines("input1").stream()
+        List<Integer> input = Utils.readLines("input01").stream()
                 .map(Integer::valueOf)
                 .toList();
 
