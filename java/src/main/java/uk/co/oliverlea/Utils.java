@@ -17,4 +17,6 @@ public class Utils {
         Path filePath = Paths.get(fileUrl.toURI());
         return Files.readAllLines(filePath);
     }
+
+    public record Pair<T, V>(T first, V second) {}
 }
